@@ -24,19 +24,17 @@ export type Database = {
           last_seen_price: number | null
           origin: string
           target_price: number
-          updated_at: string
           user_id: string
         }
         Insert: {
           active?: boolean
           created_at?: string
           destination: string
-          destination_city?: string
+          destination_city: string
           id?: string
           last_seen_price?: number | null
           origin?: string
           target_price: number
-          updated_at?: string
           user_id: string
         }
         Update: {
@@ -48,7 +46,6 @@ export type Database = {
           last_seen_price?: number | null
           origin?: string
           target_price?: number
-          updated_at?: string
           user_id?: string
         }
         Relationships: []
