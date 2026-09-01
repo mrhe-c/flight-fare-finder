@@ -48,7 +48,7 @@ const fmt = (n: number) => `NT$ ${n.toLocaleString("en-US")}`;
 function AlertsPage() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const [destination, setDestination] = useState(DESTINATIONS[0].code);
+  const [destination, setDestination] = useState("TYO");
   const [targetPrice, setTargetPrice] = useState("");
 
   const alertsQuery = useQuery({
