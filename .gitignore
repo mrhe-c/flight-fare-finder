@@ -11,6 +11,11 @@ node_modules
 dist
 *.local
 
+# Env files (keep secrets out of version control)
+.env
+.env.*
+!.env.example
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
