@@ -1,20 +1,9 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { Link, useNavigate } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { Trash2, Plane, Plus } from "lucide-react";
-
-export const Route = createFileRoute("/_authenticated/alerts")({
-  head: () => ({
-    meta: [
-      { title: "My alerts 我的通知 — Flight Price Notifier 機價通知" },
-      { name: "description", content: "Manage your flight price alerts from Taipei." },
-      { name: "robots", content: "noindex" },
-    ],
-  }),
-  component: AlertsPage,
-});
 
 const DESTINATIONS = [
   { code: "TYO", city: "東京 Tokyo" },
@@ -45,7 +34,7 @@ interface PriceAlert {
 
 const fmt = (n: number) => `NT$ ${n.toLocaleString("en-US")}`;
 
-function AlertsPage() {
+export function AppPage() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [destination, setDestination] = useState("TYO");
@@ -91,7 +80,10 @@ function AlertsPage() {
 
   const deleteMutation = useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await supabase.from("price_alerts" as never).delete().eq("id", id);
+      const { error } = await supabase
+        .from("price_alerts" as never)
+        .delete()
+        .eq("id", id);
       if (error) throw error;
     },
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ["price-alerts"] }),
@@ -113,7 +105,7 @@ function AlertsPage() {
     await queryClient.cancelQueries();
     queryClient.clear();
     await supabase.auth.signOut();
-    navigate({ to: "/auth", replace: true });
+    navigate("/sign-in", { replace: true });
   }
 
   const alerts = alertsQuery.data ?? [];
@@ -142,7 +134,9 @@ function AlertsPage() {
 
       <main className="mx-auto max-w-5xl px-5 py-10">
         <div className="animate-slide">
-          <p className="font-mono text-xs tracking-widest text-muted-foreground uppercase">My alerts 我的通知</p>
+          <p className="font-mono text-xs tracking-widest text-muted-foreground uppercase">
+            My alerts 我的通知
+          </p>
           <h1 className="mt-2 font-display text-3xl font-semibold tracking-tight">
             Watching for your perfect fare 正在幫你等價
           </h1>
@@ -160,7 +154,10 @@ function AlertsPage() {
           className="mt-8 grid animate-slide gap-4 rounded-[28px] bg-white/90 p-6 ring-1 ring-border [animation-delay:80ms] sm:grid-cols-[1fr_1fr_auto] sm:items-end"
         >
           <div>
-            <label htmlFor="dest" className="text-xs font-bold tracking-wide text-muted-foreground uppercase">
+            <label
+              htmlFor="dest"
+              className="text-xs font-bold tracking-wide text-muted-foreground uppercase"
+            >
               Destination 目的地 (from TPE 桃園)
             </label>
             <select
@@ -177,7 +174,10 @@ function AlertsPage() {
             </select>
           </div>
           <div>
-            <label htmlFor="target" className="text-xs font-bold tracking-wide text-muted-foreground uppercase">
+            <label
+              htmlFor="target"
+              className="text-xs font-bold tracking-wide text-muted-foreground uppercase"
+            >
               Target price 目標價 (NT$)
             </label>
             <input
@@ -236,7 +236,8 @@ function AlertsPage() {
                 </div>
                 <div>
                   <p className="font-display text-lg font-semibold">
-                    {a.origin} → {a.destination} <span className="text-sm text-muted-foreground">{a.destination_city}</span>
+                    {a.origin} → {a.destination}{" "}
+                    <span className="text-sm text-muted-foreground">{a.destination_city}</span>
                   </p>
                   <p className="font-mono text-xs text-muted-foreground">
                     Round trip · {a.active ? "watching 追蹤中" : "paused 已暫停"}
@@ -245,7 +246,9 @@ function AlertsPage() {
               </div>
               <div className="flex items-center gap-5">
                 <div className="text-right">
-                  <p className="text-[11px] font-bold tracking-wide text-muted-foreground uppercase">Target 目標價</p>
+                  <p className="text-[11px] font-bold tracking-wide text-muted-foreground uppercase">
+                    Target 目標價
+                  </p>
                   <p className="font-mono text-xl font-medium text-accent">{fmt(a.target_price)}</p>
                 </div>
                 <button
